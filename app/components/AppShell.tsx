@@ -7,6 +7,8 @@ import {
     DashboardOutlined,
     ClusterOutlined,
     SettingOutlined,
+    TeamOutlined,
+    ThunderboltOutlined,
 } from '@ant-design/icons';
 
 const { Sider, Content } = Layout;
@@ -14,6 +16,8 @@ const { Sider, Content } = Layout;
 const NAV_ITEMS = [
     { key: '/', icon: <DashboardOutlined />, label: '集群概览' },
     { key: '/nodes', icon: <ClusterOutlined />, label: '节点管理' },
+    { key: '/agents', icon: <TeamOutlined />, label: 'Agent 管理' },
+    { key: '/events', icon: <ThunderboltOutlined />, label: '事件引擎' },
     { key: '/settings', icon: <SettingOutlined />, label: '集群设置' },
 ];
 

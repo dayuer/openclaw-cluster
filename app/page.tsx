@@ -7,6 +7,8 @@ import {
     CheckCircleOutlined,
     CloseCircleOutlined,
     MessageOutlined,
+    TeamOutlined,
+    ThunderboltOutlined,
 } from '@ant-design/icons';
 import type { NodeWithStatus } from './lib/types';
 
@@ -14,14 +16,20 @@ const { Title, Text } = Typography;
 
 export default function DashboardPage() {
     const [nodes, setNodes] = useState<NodeWithStatus[]>([]);
+    const [agentCount, setAgentCount] = useState(0);
+    const [ruleCount, setRuleCount] = useState(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch('/api/nodes')
-            .then((r) => r.json())
-            .then((data) => setNodes(data.nodes ?? []))
-            .catch(() => setNodes([]))
-            .finally(() => setLoading(false));
+        Promise.all([
+            fetch('/api/nodes').then(r => r.json()).catch(() => ({ nodes: [] })),
+            fetch('/api/agents').then(r => r.json()).catch(() => ({ agents: [] })),
+            fetch('/api/events').then(r => r.json()).catch(() => ({ rules: [] })),
+        ]).then(([nodesData, agentsData, eventsData]) => {
+            setNodes(nodesData.nodes ?? []);
+            setAgentCount(agentsData.agents?.length ?? 0);
+            setRuleCount(eventsData.rules?.length ?? 0);
+        }).finally(() => setLoading(false));
     }, []);
 
     const online = nodes.filter((n) => n.status.online).length;
@@ -95,6 +103,28 @@ export default function DashboardPage() {
                         </Space>
                     </Card>
                 </Col>
+                <Col xs={24} sm={12} md={6}>
+                    <Card style={{ borderRadius: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+                        <Space direction="vertical" size={4}>
+                            <Text type="secondary" style={{ fontSize: 13 }}>Agent 数</Text>
+                            <Title level={2} style={{ margin: 0 }}>
+                                <TeamOutlined style={{ color: '#f59e0b', marginRight: 8 }} />
+                                {agentCount}
+                            </Title>
+                        </Space>
+                    </Card>
+                </Col>
+                <Col xs={24} sm={12} md={6}>
+                    <Card style={{ borderRadius: 12, boxShadow: '0 1px 3px rgba(0,0,0,0.08)' }}>
+                        <Space direction="vertical" size={4}>
+                            <Text type="secondary" style={{ fontSize: 13 }}>事件规则</Text>
+                            <Title level={2} style={{ margin: 0 }}>
+                                <ThunderboltOutlined style={{ color: '#a855f7', marginRight: 8 }} />
+                                {ruleCount}
+                            </Title>
+                        </Space>
+                    </Card>
+                </Col>
             </Row>
 
             {/* Node Cards Grid */}
@@ -142,7 +172,7 @@ export default function DashboardPage() {
                                     </Text>
 
                                     <Space size={4} wrap>
-                                        {node.tags.map((tag) => (
+                                        {(node.tags ?? []).map((tag) => (
                                             <Tag key={tag} color="blue">
                                                 {tag}
                                             </Tag>

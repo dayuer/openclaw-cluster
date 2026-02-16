@@ -47,7 +47,7 @@ export default function NodesPage() {
         setEditNode(node);
         form.setFieldsValue({
             ...node,
-            tags: node.tags.join(', '),
+            tags: (node.tags ?? []).join(', '),
             token: node.auth?.token ?? '',
         });
         setModalOpen(true);
@@ -133,7 +133,7 @@ export default function NodesPage() {
             title: '标签',
             dataIndex: 'tags',
             render: (tags: string[]) =>
-                tags.map((t) => (
+                (tags ?? []).map((t) => (
                     <Tag key={t} color="blue">
                         {t}
                     </Tag>

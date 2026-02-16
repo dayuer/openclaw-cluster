@@ -73,3 +73,84 @@ export interface ClusterOverview {
 export interface ClusterData {
     nodes: GatewayNode[];
 }
+
+/* ────────────────── Multi-Agent Registry ────────────────── */
+
+/** Agent 规格 — 映射 nanobot 的 AgentSpec */
+export interface AgentSpec {
+    id: string;
+    description: string;
+    /** Role prompt file path, e.g. "team/roles/general.md" */
+    systemPromptFile: string;
+    /** Tool whitelist. ["*"] = all tools */
+    tools: string[];
+    /** Skill whitelist. ["*"] = all skills */
+    skills: string[];
+    temperature: number;
+    maxTokens: number;
+    maxIterations: number;
+    isDefault?: boolean;
+    /** Keyword triggers for fast routing (skip LLM) */
+    keywords?: string[];
+}
+
+/** LLM Router result — 多领域语义分析 */
+export interface RouteResult {
+    /** Primary agent ID */
+    primary: string;
+    /** Related agent IDs, sorted by relevance */
+    related: string[];
+    /** Focused sub-question for each related agent */
+    subTasks: Record<string, string>;
+    /** One-line routing reason */
+    reason: string;
+    /** Domain labels */
+    domains: string[];
+}
+
+/** Agent registry data (persisted to agents.json) */
+export interface AgentRegistryData {
+    agents: AgentSpec[];
+    /** LLM model used for semantic routing */
+    routerModel: string;
+    /** Default agent ID (fallback) */
+    defaultAgentId: string;
+}
+
+/* ────────────────── Event Engine ────────────────── */
+
+/** Event rule — 事件匹配规则 */
+export interface EventRule {
+    id: string;
+    /** Event type pattern, supports wildcards e.g. "payment.*" */
+    eventType: string;
+    /** Target agent to handle the event */
+    agentId: string;
+    /** Prompt template with {key} placeholders */
+    template: string;
+    /** Target channel for response delivery */
+    channel: string;
+    /** Additional conditions for matching */
+    conditions: Record<string, unknown>;
+    enabled: boolean;
+    priority: number;
+}
+
+/** Event engine data (persisted to events.json) */
+export interface EventEngineData {
+    rules: EventRule[];
+}
+
+/** Inbound event payload */
+export interface InboundEvent {
+    type: string;
+    data: Record<string, unknown>;
+}
+
+/** Event dispatch result */
+export interface EventDispatchResult {
+    ruleId: string;
+    agentId: string;
+    response?: string;
+    error?: string;
+}
