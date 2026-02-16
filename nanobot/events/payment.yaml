@@ -1,0 +1,33 @@
+# 支付事件规则
+# 当 Backend 触发支付成功/失败事件时，自动派发给对应 Agent
+
+- event_type: "payment.success"
+  agent_id: "sales"
+  template: |
+    用户 {userName} 刚完成支付 ¥{amount}，订单号 {orderId}，产品: {productName}。
+    请生成一条个性化的感谢消息，并根据购买的产品推荐相关的升级服务或配套产品。
+    回复风格: 热情但不过度，专业且有价值。
+  channel: "im"
+  target_field: "personId"
+  conditions:
+    min_amount: 0
+  priority: 10
+
+- event_type: "payment.success"
+  agent_id: "general"
+  template: |
+    记录成交数据: 用户 {userName}，金额 ¥{amount}，产品 {productName}，订单 {orderId}。
+    使用 user_memory 工具的 note 操作记录此次购买行为。
+  channel: "none"
+  target_field: "personId"
+  priority: 5
+
+- event_type: "payment.failed"
+  agent_id: "sales"
+  template: |
+    用户 {userName} 的支付失败了，订单号 {orderId}，金额 ¥{amount}。
+    错误原因: {reason}。
+    请生成一条关怀消息，询问是否需要帮助，并提供替代支付方式建议。
+  channel: "im"
+  target_field: "personId"
+  priority: 10

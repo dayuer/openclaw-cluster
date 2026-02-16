@@ -1,0 +1,10 @@
+# 飞书应用配置
+feishu:
+  # 从飞书开放平台获取 (也可通过环境变量 FEISHU_APP_ID / FEISHU_APP_SECRET 覆盖)
+  app_id: ""
+  app_secret: ""
+
+# 默认设置
+defaults:
+  folder_token: "" # 默认文件夹 token (留空则使用根目录)
+  template_dir: "" # 模板目录 (留空使用内置 templates/)

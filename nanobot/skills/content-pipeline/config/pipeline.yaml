@@ -1,0 +1,102 @@
+# Content Pipeline 配置
+# 修改此文件自定义你的创作流水线
+
+# === 用户画像 ===
+user_profile:
+  name: "李玉卿"
+  identity: "创业者 / 技术产品人 / AI 实践者"
+  domains:
+    primary: ["AI 应用", "创业实战", "技术产品", "出海"]
+    secondary: ["效率工具", "自动化", "SaaS", "独立开发"]
+    avoid: ["政治", "娱乐八卦", "低质量内容", "鸡汤"]
+
+# === 搜索配置 ===
+search:
+  # 核心关键词（会组合成搜索查询）
+  keywords:
+    - "AI Agent"
+    - "LLM"
+    - "SaaS"
+    - "出海"
+    - "创业"
+    - "独立开发"
+    - "效率工具"
+
+  # 搜索查询模板
+  query_templates:
+    - "{keyword} 最新争议 OR 重大更新"
+    - "{keyword} github trending"
+    - "{keyword} 融资 OR funding"
+    - "{keyword} 实测 OR review OR 评测"
+    - "{keyword} 甚至 OR 没想到" # 反直觉内容
+
+  # 时间范围
+  timeframe: "24h"
+
+  # 每次搜索结果数量
+  max_results: 20
+
+# === 选题配置 ===
+topic:
+  # 每日推送选题数
+  count: 5
+
+  # 评分权重
+  scoring_weights:
+    relevance: 0.4 # 相关性
+    hotness: 0.3 # 热度
+    controversy: 0.3 # 争议性
+
+  # 过滤规则
+  filters:
+    min_controversy: 2.0 # 最低争议性分数
+    min_relevance: 3.0 # 最低相关性分数
+    skip_press_releases: true # 跳过新闻通稿
+    blocked_keywords: ["赌博", "色情", "诈骗"]
+
+# === 写作配置 ===
+writing:
+  # 目标字数
+  target_length: 2500 # 2000-3000 字
+
+  # 视觉锚点间隔（每 N 字插入一个）
+  anchor_interval: 500
+
+  # 使用的 LLM
+  llm: "R1" # 长文创作用 R1（通过 llm-processor skill）
+
+  # 金句插入策略
+  golden_quotes:
+    min_per_article: 1
+    max_per_article: 3
+
+  # 段落限制
+  max_paragraph_length: 300 # 超过此字数的段落会被警告
+
+# === 发布配置 ===
+publishing:
+  # 初稿先发到飞书
+  draft_platform: "feishu"
+
+  # 飞书文档标题前缀
+  title_prefix: "[草稿] "
+
+  # 发布前必须人工审核
+  require_human_review: true # ⚠️ 此项永远为 true，不可修改！
+
+# === 记忆配置 ===
+memory:
+  # 检查选题冲突的天数范围
+  collision_check_days: 90
+
+  # 相似度阈值
+  collision_threshold: 0.5 # > 0.5 警告，> 0.7 建议放弃
+
+  # 立场矛盾检测
+  stance_check: true
+
+# === 定时任务（仅作为参考，实际调度由外部系统完成） ===
+schedule:
+  morning_scout: "0 9 * * *" # 每天 9:00 侦察选题
+  draft_deadline: "0 20 * * *" # 每天 20:00 前完成初稿
+  weekly_review: "0 10 * * 1" # 每周一 10:00 回顾

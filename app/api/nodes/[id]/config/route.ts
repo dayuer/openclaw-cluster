@@ -16,7 +16,7 @@ export async function GET(
         return NextResponse.json({ error: 'Node not found' }, { status: 404 });
     }
 
-    const config = await getConfig(node.url, node.auth);
+    const config = await getConfig(node.url, node.auth?.token);
     if (!config) {
         return NextResponse.json(
             { error: 'Cannot reach Gateway' },
@@ -41,7 +41,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
         );
     }
 
-    const result = await patchConfig(node.url, body.raw, body.baseHash, node.auth);
+    const result = await patchConfig(node.url, body.raw, body.baseHash, node.auth?.token);
     if (!result.ok) {
         return NextResponse.json(
             { error: result.error ?? 'Patch failed' },

@@ -187,7 +187,7 @@ export class GatewayClient {
     }
 
     const role = 'operator';
-    const scopes = ['operator.admin'];
+    const scopes = ['operator.admin', 'operator.read', 'operator.approvals'];
 
     const auth = this.opts.token || this.opts.password
       ? { token: this.opts.token, password: this.opts.password }
@@ -197,7 +197,7 @@ export class GatewayClient {
       minProtocol: 3,
       maxProtocol: 3,
       client: {
-        id: this.opts.clientName ?? 'cluster-manager',
+        id: this.opts.clientName ?? 'gateway-client',
         version: this.opts.clientVersion ?? '1.0.0',
         platform: this.opts.platform ?? process.platform,
         mode: 'backend',

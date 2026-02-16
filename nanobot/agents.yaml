@@ -1,0 +1,192 @@
+# 多Agent配置 — 每个角色是独立 AgentLoop 实例
+# 拥有各自的 model / tools / skills / system_prompt / knowledge
+#
+# tools:  系统工具白名单 (Python 类，注册到 AgentLoop)
+# skills: Skill 能力白名单 (SKILL.md + 脚本，通过 exec 调用)
+#         → 详见 SKILLS.md
+
+agents:
+  # ═══ 超级司机顾问团 ═══
+
+  - id: general
+    description: "翔哥 — 十年老司机，综合闲聊与接单策略"
+    system_prompt_file: "team/roles/general.md"
+    tools: ["*"]
+    skills: ["*"]
+    is_default: true
+    temperature: 0.7
+    max_tokens: 1024
+    max_iterations: 30
+
+  - id: legal
+    description: "叶律 — 铁嘴大状，法律纠纷与维权"
+    system_prompt_file: "team/roles/legal.md"
+    tools:
+      - knowledge_search
+      - web_search
+      - web_fetch
+      - user_memory
+    skills: []
+    temperature: 0.4
+    max_tokens: 8192
+    max_iterations: 15
+
+  - id: mechanic
+    description: "老周 — 修车神医，车辆诊断与省钱维修"
+    system_prompt_file: "team/roles/mechanic.md"
+    tools:
+      - knowledge_search
+      - web_search
+      - web_fetch
+      - user_memory
+    skills: []
+    temperature: 0.5
+    max_tokens: 1024
+    max_iterations: 15
+
+  - id: health
+    description: "林姨 — 唠叨神医，职业健康与养生"
+    system_prompt_file: "team/roles/health.md"
+    tools:
+      - knowledge_search
+      - web_search
+      - user_memory
+    skills: []
+    temperature: 0.6
+    max_tokens: 1024
+    max_iterations: 10
+
+  - id: algo
+    description: "阿K — 算法黑客，派单逻辑与数据优化"
+    system_prompt_file: "team/roles/algo.md"
+    tools:
+      - survival_data
+      - knowledge_search
+      - user_memory
+    skills: []
+    temperature: 0.3
+    max_tokens: 1024
+    max_iterations: 15
+
+  - id: metaphysics
+    description: "裴大师 — 玄学高人，运势占卜与心理安慰"
+    system_prompt_file: "team/roles/metaphysics.md"
+    tools:
+      - user_memory
+    skills: []
+    temperature: 0.9
+    max_tokens: 1024
+    max_iterations: 10
+
+  - id: insurance
+    description: "严公估 — 理赔推土机，保险理赔与定损争议"
+    system_prompt_file: "team/roles/insurance.md"
+    tools:
+      - knowledge_search
+      - web_search
+      - user_memory
+    skills: []
+    temperature: 0.4
+    max_tokens: 1024
+    max_iterations: 15
+
+  - id: food
+    description: "饭桶哥 — 觅食向导，快餐推荐与停车攻略"
+    system_prompt_file: "team/roles/food.md"
+    tools:
+      - web_search
+      - web_fetch
+      - user_memory
+    skills: []
+    temperature: 0.7
+    max_tokens: 1024
+    max_iterations: 10
+
+  - id: rescue
+    description: "猛哥 — 救援战神，紧急救援与道路抢修"
+    system_prompt_file: "team/roles/rescue.md"
+    tools:
+      - survival_notify
+      - user_memory
+    skills: []
+    temperature: 0.3
+    max_tokens: 1024
+    max_iterations: 10
+
+  - id: service
+    description: "小灵通 — 车务管家，违章消分与年检过户"
+    system_prompt_file: "team/roles/service.md"
+    tools:
+      - knowledge_search
+      - web_search
+      - user_memory
+    skills: []
+    temperature: 0.4
+    max_tokens: 1024
+    max_iterations: 10
+
+  - id: ucar
+    description: "小优优 — 车辆顾问，租车买车与以租代购"
+    system_prompt_file: "team/roles/ucar.md"
+    tools:
+      - knowledge_search
+      - web_search
+      - user_memory
+    skills: []
+    temperature: 0.5
+    max_tokens: 1024
+    max_iterations: 10
+
+  # ═══ 销售团队 ═══
+
+  - id: xiaomi
+    description: "获客专员·小蜜 — 热情主动，发现线索与破冰"
+    system_prompt_file: "team/roles/xiaomi.md"
+    tools:
+      - survival_notify
+      - knowledge_search
+      - user_memory
+    skills: []
+    temperature: 0.6
+    max_tokens: 1024
+    max_iterations: 15
+
+  - id: acheng
+    description: "销售顾问·阿成 — 专业耐心，痛点诊断与促单"
+    system_prompt_file: "team/roles/acheng.md"
+    tools:
+      - survival_notify
+      - knowledge_search
+      - user_memory
+    skills: []
+    temperature: 0.5
+    max_tokens: 1024
+    max_iterations: 15
+
+  - id: guanjia
+    description: "售后管家·管家 — 温暖细心，新手引导与续费"
+    system_prompt_file: "team/roles/guanjia.md"
+    tools:
+      - survival_notify
+      - knowledge_search
+      - user_memory
+    skills: []
+    temperature: 0.5
+    max_tokens: 1024
+    max_iterations: 15
+
+  # ═══ 股票分析 ═══
+
+  - id: stockgod
+    description: "股神 — 实战派技术分析师，全市场行情查询与技术面研判"
+    system_prompt_file: "team/roles/stockgod.md"
+    tools:
+      - survival_stock
+      - knowledge_search
+      - web_search
+      - user_memory
+    skills:
+      - stock
+    temperature: 0.3
+    max_tokens: 4096
+    max_iterations: 20

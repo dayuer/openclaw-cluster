@@ -15,6 +15,6 @@ export async function GET(
         return NextResponse.json({ error: 'Node not found' }, { status: 404 });
     }
 
-    const health = await healthCheck(node.url, node.auth);
+    const health = await healthCheck(node.url, node.auth?.token);
     return NextResponse.json(health);
 }

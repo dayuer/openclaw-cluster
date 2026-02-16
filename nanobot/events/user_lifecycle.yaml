@@ -1,0 +1,35 @@
+# 用户生命周期事件规则
+
+- event_type: "user.registered"
+  agent_id: "sales"
+  template: |
+    新用户注册: {userName}，来源渠道: {source}，注册时间: {registeredAt}。
+    请生成一条欢迎消息，介绍平台核心功能，并提供新手引导。
+  channel: "im"
+  target_field: "personId"
+  priority: 10
+
+- event_type: "user.inactive"
+  agent_id: "sales"
+  template: |
+    用户 {userName} 已经 {inactiveDays} 天未登录。
+    上次活动: {lastActiveAt}，常用功能: {topFeatures}。
+    请生成一条召回消息，提及TA过去感兴趣的功能或近期平台更新。
+  channel: "im"
+  target_field: "personId"
+  conditions:
+    min_inactiveDays: 7
+  priority: 5
+
+- event_type: "user.feedback"
+  agent_id: "general"
+  template: |
+    用户 {userName} 提交了反馈:
+    评分: {rating}/5
+    内容: {content}
+
+    请分析反馈情绪和关键诉求，记录到用户记忆中。
+    如果评分 <= 2 或内容包含投诉，生成一条道歉+解决方案消息。
+  channel: "im"
+  target_field: "personId"
+  priority: 8

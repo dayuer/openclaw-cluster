@@ -14,9 +14,10 @@ export async function GET() {
     const results: NodeWithStatus[] = await Promise.all(
         nodes.map(async (node) => {
             try {
+                const token = node.auth?.token;
                 const [health, sessions] = await Promise.all([
-                    healthCheck(node.url, node.auth),
-                    listSessions(node.url, node.auth),
+                    healthCheck(node.url, token),
+                    listSessions(node.url, token),
                 ]);
                 return {
                     ...node,

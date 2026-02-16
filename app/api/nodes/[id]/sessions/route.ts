@@ -15,6 +15,6 @@ export async function GET(
         return NextResponse.json({ error: 'Node not found' }, { status: 404 });
     }
 
-    const sessions = await listSessions(node.url, node.auth);
+    const sessions = await listSessions(node.url, node.auth?.token);
     return NextResponse.json({ sessions });
 }
